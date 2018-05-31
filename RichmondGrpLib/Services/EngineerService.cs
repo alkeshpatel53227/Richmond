@@ -1,4 +1,4 @@
-﻿using RichmondGrpLib.Entities;
+using RichmondGrpLib.Entities;
 using RichmondGrpLib.Models;
 using System;
 using System.Collections.Generic;
@@ -58,77 +58,20 @@ namespace RichmondGrpLib.Services
             {
                 using (var ctx = new DB_121539_alkeshpatelfEntities())
                 {
+                    ScheduleService scheduleService = new ScheduleService();
                     List<EngineerModel> items = GetAllEngineers();
                     var engineerIds = items.Select(s => s.EngineerId).ToList();
-                    //Check for engineer which has not been assigned to schedule atleast once in last 11 days or future 11 days
-                    DateTime pastMinOne = FindWorkDay(selectedDate, -7, true);
-                    DateTime futureMinOne = FindWorkDay(selectedDate, 7, false);
-                    int pastMinOneTotalRows = ctx.Schedules.Where(c => c.ScheduleDate >= pastMinOne).Count();
-                    if (pastMinOneTotalRows == 14 || pastMinOneTotalRows == 15)
-                    {
-                        var lastElevenDaysCheck = ctx.Schedules.Where(c => c.ScheduleDate >= pastMinOne).GroupBy(i => i.ScheduleEngineer)
-                    .Where(x => x.Count() > 0)
-                    .Select(val => val.Key);
-                        for (var i = 0; i < engineerIds.Count(); i++)
-                        {
-                            bool itemHit = false;
-                            foreach (var item in lastElevenDaysCheck)
-                            {
-
-
-                                if (item.Value == engineerIds[i])
-                                {
-                                    itemHit = true;
-                                    break;
-                                }
-                            }
-                            if (!itemHit)
-                            {
-                                EngineerModel missingEngineerModel = new EngineerModel();
-                                missingEngineerModel.EngineerId = engineerIds[i];
-                                return missingEngineerModel;
-                            }
-                        }
-
-                    }
-                    int futureMinOneTotalRows = ctx.Schedules.Where(c => c.ScheduleDate <= futureMinOne).Count();
-                    if (futureMinOneTotalRows == 18 || futureMinOneTotalRows == 19)
-                    {
-                        var futureElevenDaysCheck = ctx.Schedules.Where(c => c.ScheduleDate <= futureMinOne).GroupBy(i => i.ScheduleEngineer)
-                   .Where(x => x.Count() > 0)
-                   .Select(val => val.Key);
-
-                        for (var i = 0; i < engineerIds.Count(); i++)
-                        {
-                            bool itemHit = false;
-                            foreach (var item in futureElevenDaysCheck)
-                            {
-
-
-                                if (item.Value == engineerIds[i])
-                                {
-                                    itemHit = true;
-                                    break;
-                                }
-                            }
-                            if (!itemHit)
-                            {
-                                EngineerModel missingEngineerModel = new EngineerModel();
-                                missingEngineerModel.EngineerId = engineerIds[i];
-                                return missingEngineerModel;
-                            }
-                        }
-                    }
+                    
                     //Check for engineer which has not been assigned to schedule twice in last 13 days or future 13 days
                     DateTime pastMinTwo = FindWorkDay(selectedDate, -9, true);
                     DateTime futureMinTwo = FindWorkDay(selectedDate, 9, false);
                     int pastMinTwoTotalRows = ctx.Schedules.Where(c => c.ScheduleDate >= pastMinTwo).Count();
-                    if (pastMinTwoTotalRows == 26 || pastMinTwoTotalRows == 27)
+                    if (pastMinTwoTotalRows >= 14)
                     {
                         var lastThirteenDaysCheck = ctx.Schedules.Where(c => c.ScheduleDate >= pastMinTwo).GroupBy(i => i.ScheduleEngineer)
                     .Where(x => x.Count() > 1)
                     .Select(val => val.Key);
-
+                        List<int> notHitIds = new List<int>();
                         for (var i = 0; i < engineerIds.Count(); i++)
                         {
                             bool itemHit = false;
@@ -144,19 +87,29 @@ namespace RichmondGrpLib.Services
                             }
                             if (!itemHit)
                             {
-                                EngineerModel missingEngineerModel = new EngineerModel();
-                                missingEngineerModel.EngineerId = engineerIds[i];
-                                return missingEngineerModel;
+                               
+                                if (!scheduleService.IsEngineerAssignedScheduleForConsecativeDays(selectedDate, engineerIds[i]))
+                                {
+                                    notHitIds.Add(engineerIds[i]);
+                                   
+                                }
                             }
+                        }
+                        if (notHitIds.Count > 0 )
+                        {
+                            EngineerModel missingEngineerModel = new EngineerModel();
+                            missingEngineerModel.EngineerId = notHitIds[0];
+                            return missingEngineerModel;
                         }
                     }
                     int futureMinTwoTotalRows = ctx.Schedules.Where(c => c.ScheduleDate <= futureMinTwo).Count();
-                    if (futureMinTwoTotalRows == 26 || futureMinTwoTotalRows == 27)
+                    if (futureMinTwoTotalRows >= 14)
                     {
                         var futureThirteenDaysCheck = ctx.Schedules.Where(c => c.ScheduleDate <= futureMinTwo).GroupBy(i => i.ScheduleEngineer)
                    .Where(x => x.Count() > 1)
                    .Select(val => val.Key);
 
+                        List<int> notHitIds = new List<int>();
                         for (var i = 0; i < engineerIds.Count(); i++)
                         {
                             bool itemHit = false;
@@ -172,14 +125,102 @@ namespace RichmondGrpLib.Services
                             }
                             if (!itemHit)
                             {
-                                EngineerModel missingEngineerModel = new EngineerModel();
-                                missingEngineerModel.EngineerId = engineerIds[i];
-                                return missingEngineerModel;
+
+                                if (!scheduleService.IsEngineerAssignedScheduleForConsecativeDays(selectedDate, engineerIds[i]))
+                                {
+                                    notHitIds.Add(engineerIds[i]);
+
+                                }
                             }
+                        }
+                        if (notHitIds.Count > 0)
+                        {
+                            EngineerModel missingEngineerModel = new EngineerModel();
+                            missingEngineerModel.EngineerId = notHitIds[0];
+                            return missingEngineerModel;
+                        }
+                    }
+                    //Check for engineer which has not been assigned to schedule atleast once in last 11 days or future 11 days
+                    DateTime pastMinOne = FindWorkDay(selectedDate, -7, true);
+                    DateTime futureMinOne = FindWorkDay(selectedDate, 7, false);
+                    int pastMinOneTotalRows = ctx.Schedules.Where(c => c.ScheduleDate >= pastMinOne).Count();
+                    if (pastMinOneTotalRows > 8 && pastMinOneTotalRows < 14 )
+                    {
+                        var lastElevenDaysCheck = ctx.Schedules.Where(c => c.ScheduleDate >= pastMinOne).GroupBy(i => i.ScheduleEngineer)
+                    .Where(x => x.Count() > 0)
+                    .Select(val => val.Key);
+                        List<int> notHitIds = new List<int>();
+                        for (var i = 0; i < engineerIds.Count(); i++)
+                        {
+                            bool itemHit = false;
+                            foreach (var item in lastElevenDaysCheck)
+                            {
+
+
+                                if (item.Value == engineerIds[i])
+                                {
+                                    itemHit = true;
+                                    break;
+                                }
+                            }
+                            if (!itemHit)
+                            {
+
+                                if (!scheduleService.IsEngineerAssignedScheduleForConsecativeDays(selectedDate, engineerIds[i]))
+                                {
+                                    notHitIds.Add(engineerIds[i]);
+
+                                }
+                            }
+                        }
+                        if (notHitIds.Count > 0)
+                        {
+                            EngineerModel missingEngineerModel = new EngineerModel();
+                            missingEngineerModel.EngineerId = notHitIds[0];
+                            return missingEngineerModel;
+                        }
+
+                    }
+                    int futureMinOneTotalRows = ctx.Schedules.Where(c => c.ScheduleDate <= futureMinOne).Count();
+                    if (futureMinOneTotalRows > 8 && futureMinOneTotalRows < 14)
+                    {
+                        var futureElevenDaysCheck = ctx.Schedules.Where(c => c.ScheduleDate <= futureMinOne).GroupBy(i => i.ScheduleEngineer)
+                   .Where(x => x.Count() > 0)
+                   .Select(val => val.Key);
+
+                        List<int> notHitIds = new List<int>();
+                        for (var i = 0; i < engineerIds.Count(); i++)
+                        {
+                            bool itemHit = false;
+                            foreach (var item in futureElevenDaysCheck)
+                            {
+
+
+                                if (item.Value == engineerIds[i])
+                                {
+                                    itemHit = true;
+                                    break;
+                                }
+                            }
+                            if (!itemHit)
+                            {
+
+                                if (!scheduleService.IsEngineerAssignedScheduleForConsecativeDays(selectedDate, engineerIds[i]))
+                                {
+                                    notHitIds.Add(engineerIds[i]);
+
+                                }
+                            }
+                        }
+                        if (notHitIds.Count > 0)
+                        {
+                            EngineerModel missingEngineerModel = new EngineerModel();
+                            missingEngineerModel.EngineerId = notHitIds[0];
+                            return missingEngineerModel;
                         }
                     }
                     EngineerModel selectedEngineer = null;
-                    ScheduleService scheduleService = new ScheduleService();
+                   
                     while (selectedEngineer == null)
                     {
                         int r = rnd.Next(items.Count);
