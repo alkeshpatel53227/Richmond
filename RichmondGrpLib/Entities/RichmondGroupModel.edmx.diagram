@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b05bb53a6d2c47c395e3f0d4085a2dcf" Name="Diagram1">
+        <EntityTypeShape EntityType="DB_121539_alkeshpatelfModel.AspNetUser" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_121539_alkeshpatelfModel.Engineer" Width="1.5" PointX="3" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_121539_alkeshpatelfModel.Schedule" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
+        <AssociationConnector Association="DB_121539_alkeshpatelfModel.FK_Engineer_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_121539_alkeshpatelfModel.FK_EngineerUpdate_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_121539_alkeshpatelfModel.FK_Schedule_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_121539_alkeshpatelfModel.FK_ScheduleUpdate_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_121539_alkeshpatelfModel.FK_Schedule_Engineer" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

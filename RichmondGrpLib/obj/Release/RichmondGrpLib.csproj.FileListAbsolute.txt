@@ -1,0 +1,10 @@
+c:\users\alkes_000\documents\visual studio 2015\Projects\RichmondGroup\RichmondGrpLib\bin\Release\RichmondGrpLib.dll.config
+c:\users\alkes_000\documents\visual studio 2015\Projects\RichmondGroup\RichmondGrpLib\bin\Release\RichmondGrpLib.dll
+c:\users\alkes_000\documents\visual studio 2015\Projects\RichmondGroup\RichmondGrpLib\bin\Release\RichmondGrpLib.pdb
+c:\users\alkes_000\documents\visual studio 2015\Projects\RichmondGroup\RichmondGrpLib\bin\Release\EntityFramework.dll
+c:\users\alkes_000\documents\visual studio 2015\Projects\RichmondGroup\RichmondGrpLib\bin\Release\EntityFramework.SqlServer.dll
+c:\users\alkes_000\documents\visual studio 2015\Projects\RichmondGroup\RichmondGrpLib\bin\Release\EntityFramework.xml
+c:\users\alkes_000\documents\visual studio 2015\Projects\RichmondGroup\RichmondGrpLib\bin\Release\EntityFramework.SqlServer.xml
+c:\users\alkes_000\documents\visual studio 2015\Projects\RichmondGroup\RichmondGrpLib\obj\Release\RichmondGrpLib.dll
+c:\users\alkes_000\documents\visual studio 2015\Projects\RichmondGroup\RichmondGrpLib\obj\Release\RichmondGrpLib.pdb
+c:\users\alkes_000\documents\visual studio 2015\Projects\RichmondGroup\RichmondGrpLib\obj\Release\RichmondGrpLib.csprojResolveAssemblyReference.cache
