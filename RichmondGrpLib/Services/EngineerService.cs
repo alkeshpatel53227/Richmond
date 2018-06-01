@@ -10,7 +10,7 @@ namespace RichmondGrpLib.Services
 {
     public class EngineerService
     {
-        private static Random rnd = new Random();
+        
 
         /// <summary>
         /// Get all Engineers
@@ -97,8 +97,10 @@ namespace RichmondGrpLib.Services
                         }
                         if (notHitIds.Count > 0 )
                         {
+                            Random rand = new Random();
+                            int r = rand.Next(0 ,notHitIds.Count - 1);
                             EngineerModel missingEngineerModel = new EngineerModel();
-                            missingEngineerModel.EngineerId = notHitIds[0];
+                            missingEngineerModel.EngineerId = notHitIds[r];
                             return missingEngineerModel;
                         }
                     }
@@ -120,7 +122,7 @@ namespace RichmondGrpLib.Services
                                 if (item.Value == engineerIds[i])
                                 {
                                     itemHit = true;
-                                    break;
+                                   break;
                                 }
                             }
                             if (!itemHit)
@@ -135,8 +137,10 @@ namespace RichmondGrpLib.Services
                         }
                         if (notHitIds.Count > 0)
                         {
+                            Random rand = new Random();
+                            int r = rand.Next(0, notHitIds.Count - 1);
                             EngineerModel missingEngineerModel = new EngineerModel();
-                            missingEngineerModel.EngineerId = notHitIds[0];
+                            missingEngineerModel.EngineerId = notHitIds[r];
                             return missingEngineerModel;
                         }
                     }
@@ -175,8 +179,10 @@ namespace RichmondGrpLib.Services
                         }
                         if (notHitIds.Count > 0)
                         {
+                            Random rand = new Random();
+                            int r = rand.Next(0, notHitIds.Count - 1);
                             EngineerModel missingEngineerModel = new EngineerModel();
-                            missingEngineerModel.EngineerId = notHitIds[0];
+                            missingEngineerModel.EngineerId = notHitIds[r];
                             return missingEngineerModel;
                         }
 
@@ -214,16 +220,18 @@ namespace RichmondGrpLib.Services
                         }
                         if (notHitIds.Count > 0)
                         {
+                            Random rand = new Random();
+                            int r = rand.Next(0, notHitIds.Count - 1);
                             EngineerModel missingEngineerModel = new EngineerModel();
-                            missingEngineerModel.EngineerId = notHitIds[0];
+                            missingEngineerModel.EngineerId = notHitIds[r];
                             return missingEngineerModel;
                         }
                     }
                     EngineerModel selectedEngineer = null;
-                   
+                    Random rnd = new Random();
                     while (selectedEngineer == null)
                     {
-                        int r = rnd.Next(items.Count);
+                        int r = rnd.Next(0, items.Count-1);
                         if (!scheduleService.IsEngineerAssignedScheduleForConsecativeDays(selectedDate, items[r].EngineerId))
                         {
                             selectedEngineer = items[r];
